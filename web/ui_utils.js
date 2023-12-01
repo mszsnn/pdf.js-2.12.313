@@ -98,6 +98,23 @@ function getOutputScale(ctx) {
   };
 }
 
+// 为了父级使用
+function dispatchEventForParent(name, params = {}) {
+  const event = document.createEvent("CustomEvent");
+  event.initCustomEvent(name, true, true, params);
+  try {
+    // Attempt to dispatch the event at the embedding `document`,
+    // in order to support cases where the viewer is embedded in
+    // a *dynamically* created <iframe> element.
+    parent.document.dispatchEvent(event);
+  } catch (ex) {
+    // The viewer could be in e.g. a cross-origin <iframe> element,
+    // fallback to dispatching the event at the current `document`.
+    console.error(`webviewerloaded: ${ex}`);
+    document.dispatchEvent(event);
+  }
+}
+
 /**
  * Scrolls specified element into view of its parent.
  * @param {Object} element - The element to be visible.
@@ -821,6 +838,7 @@ export {
   DEFAULT_SCALE,
   DEFAULT_SCALE_DELTA,
   DEFAULT_SCALE_VALUE,
+  dispatchEventForParent,
   getActiveOrFocusedElement,
   getOutputScale,
   getPageSizeInches,

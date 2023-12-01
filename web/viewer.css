@@ -1601,7 +1601,6 @@ html[dir="rtl"] .treeItemToggler::before {
 }
 
 #errorWrapper {
-  background: none repeat scroll 0 0 var(--errorWrapper-bg-color);
   color: var(--main-color);
   left: 0;
   position: absolute;
@@ -1614,8 +1613,13 @@ html[dir="rtl"] .treeItemToggler::before {
   float: left;
 }
 
+#errorShowMore {
+  display: none;
+}
+
 #errorMessageRight {
   float: right;
+  display: none;
 }
 
 #errorMoreInfo {

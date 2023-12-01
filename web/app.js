@@ -20,6 +20,7 @@ import {
   apiPageModeToSidebarView,
   AutoPrintRegExp,
   DEFAULT_SCALE_VALUE,
+  dispatchEventForParent,
   getActiveOrFocusedElement,
   isValidRotation,
   isValidScrollMode,
@@ -960,6 +961,10 @@ const PDFViewerApplication = {
           key = "unexpected_response_error";
         }
         return this.l10n.get(key).then(msg => {
+          dispatchEventForParent("loadFileError", {
+            error: reason?.message,
+          });
+          this.loadingBar.hide();
           this._documentError(msg, { message: reason?.message });
           throw reason;
         });
@@ -1192,6 +1197,9 @@ const PDFViewerApplication = {
       this.loadingBar.hide();
 
       firstPagePromise.then(() => {
+        dispatchEventForParent("documentloaded", {
+          container: this.appConfig.mainContainer,
+        });
         this.eventBus.dispatch("documentloaded", { source: this });
       });
     });
@@ -1260,7 +1268,6 @@ const PDFViewerApplication = {
       ])
         .then(async ([timeStamp, stored, pageLayout, pageMode, openAction]) => {
           const viewOnLoad = AppOptions.get("viewOnLoad");
-
           this._initializePdfHistory({
             fingerprint: pdfDocument.fingerprints[0],
             viewOnLoad,
