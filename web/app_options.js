@@ -148,12 +148,12 @@ const defaultOptions = {
   },
   renderer: {
     /** @type {string} */
-    value: "canvas",
+    value: "svg",
     kind: OptionKind.VIEWER,
   },
   sidebarViewOnLoad: {
     /** @type {number} */
-    value: -1,
+    value: 0, // 不显示导航
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE,
   },
   scrollModeOnLoad: {
